@@ -44,7 +44,8 @@ class MessageHandler {
     }
 
     if (!this.isProductMessage(message.body)) {
-      await this.sendResponse(message, "Por favor, informe um produto.");
+      const productString: string = 'Produto: \n Informacoes adicionais: \n Valor máximo: \n';
+      await this.sendResponse(message, `Por favor, informe o texto necessário para cadastrar um produto. ${productString}`);
       return;
     }
 
