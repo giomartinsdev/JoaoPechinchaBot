@@ -1,13 +1,13 @@
 {
-  "name": "joaopechincha",
+  "name": "joaopechincharesponser",
   "version": "1.0.0",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start:prod": "nodemon build/index.js",
-    "build:dev": "tsc",
-    "start:dev": "node build/index.js"
-  },
+  "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start:prod": "nodemon build/index.js",
+      "build:dev": "tsc",
+      "start:dev": "node build/index.js"
+    },
   "author": "",
   "license": "ISC",
   "description": "",

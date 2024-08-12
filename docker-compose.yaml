@@ -4,7 +4,24 @@ services:
     container_name: joao_pechincha_reader_c
     ports:
       - '3001:3001'
+    environment:
+      KAFKA_BROKER: redpanda:29092
     depends_on:
+      - redpanda
+      - postgres
+    networks:
+      - app-network
+
+
+  joao_pechincha_responser:
+    build: ./JoaoPechinchaResponser
+    container_name: joao_pechincha_responser_c
+    ports:
+      - '3002:3002'
+    environment:
+      KAFKA_BROKER: redpanda:29092
+    depends_on:
+      - redpanda
       - postgres
     networks:
       - app-network
@@ -15,6 +32,42 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: senha_segura
+    networks:
+      - app-network
+
+  redpanda:
+    image: docker.redpanda.com/vectorized/redpanda:v22.2.2
+    container_name: joao_pechincha_broker
+    command:
+      - redpanda start
+      - --kafka-addr PLAINTEXT://0.0.0.0:29092
+      - --advertise-kafka-addr PLAINTEXT://redpanda:29092
+    ports:
+      - 29092:29092
+    networks:
+      - app-network
+
+  console:
+    container_name: joao_pechincha_console
+    image: docker.redpanda.com/vectorized/console:master-173596f
+    environment:
+      KAFKA_BROKERS: redpanda:29092
+    ports:
+      - 8080:8080
+    depends_on:
+      - redpanda
+    networks:
+      - app-network
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "redpanda:29092"
+    depends_on:
+      - "redpanda"
     networks:
       - app-network
 
