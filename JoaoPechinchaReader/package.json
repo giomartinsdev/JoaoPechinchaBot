@@ -1,0 +1,26 @@
+{
+  "name": "joaopechincha",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:prod": "nodemon build/index.js",
+    "build:dev": "tsc",
+    "start:dev": "node build/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "pg": "^8.12.0",
+    "qrcode-terminal": "^0.12.0",
+    "uuid": "^10.0.0",
+    "whatsapp-web.js": "^1.25.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.6",
+    "@types/qrcode-terminal": "^0.12.2",
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5.5.4"
+  }
+}

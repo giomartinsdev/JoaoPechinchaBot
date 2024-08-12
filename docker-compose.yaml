@@ -1,0 +1,23 @@
+services:
+  joao_pechincha_reader:
+    build: ./JoaoPechinchaReader
+    container_name: joao_pechincha_reader_c
+    ports:
+      - '3001:3001'
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: senha_segura
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
