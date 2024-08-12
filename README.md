@@ -1,6 +1,6 @@
-# JOaoPechincha
+# JoaoPechincha
 
-Este é um projeto de bot de WhatsApp para aviso de promoções desenvolvido em [Node.js](https://nodejs.org/) utilizando a biblioteca [WhatsappWebJS](https://docs.wwebjs.dev) para interagir com a API do WhatsApp.
+Este é um projeto de bot de WhatsApp para aviso de promoções desenvolvido em [Node.js](https://nodejs.org/) utilizando a biblioteca [WhatsappWebJS](https://docs.wwebjs.dev) para interagir com a API do WhatsApp e a tecnologia [Kafka](https://kafka.apache.org/) para mensageria.
 
 ## Pré-requisitos
 
