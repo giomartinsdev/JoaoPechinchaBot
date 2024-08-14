@@ -27,3 +27,5 @@ CREATE TABLE public.user_requests (
 	CONSTRAINT fk_member FOREIGN KEY (member_id) REFERENCES members(id),
 	CONSTRAINT user_requests_pkey PRIMARY KEY (id)
 );
+
+TA ERRADO O ADDITIONAL
