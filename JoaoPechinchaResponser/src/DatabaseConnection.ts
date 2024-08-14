@@ -9,7 +9,7 @@ class DatabaseConnection {
       password: 'senha_segura',
       host: 'postgres',
       port: 5432,
-      database: 'postgres',
+      database: 'postgres'
     });
     console.log('Connected to database');
   }

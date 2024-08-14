@@ -24,10 +24,10 @@ class KafkaConfig {
     }
   }
 
-  async produce(topic: string, message: string) {
+  async produce(KafkaTopic: string, message: string) {
     try {
       await this.producer.send({
-        topic: topic,
+        topic: KafkaTopic,
         messages: [{ value: message }]
       });
     } catch (error) {
@@ -35,11 +35,11 @@ class KafkaConfig {
     }
   }
 
-  async subscribe(topic: string) {
+  async subscribe(KafkaTopic: string) {
     try {
       await this.consumer.connect();
       await this.consumer.subscribe({
-        topic: topic,
+        topic: KafkaTopic,
         fromBeginning: true
       });
     } catch (error) {

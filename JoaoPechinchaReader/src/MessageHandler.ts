@@ -31,15 +31,15 @@ class MessageHandler {
 
   public async processMessage(message: MyMessage): Promise<void> {
     if (!await this.isMember(message)) {
-      await this.produceKafkaMessage(message, "Por favor, torne-se um membro para continuar.");
+      await this.produceKafkaMessage(message, 'Por favor, torne-se um membro para continuar.');
       return;
     }
 
     if (this.cancelRequest(message.body)) {
       if (!await this.messageRepository.cancelRequest(message)) {
-        await this.produceKafkaMessage(message, "Erro ao cancelar solicitacão de rastreio de produto.");
+        await this.produceKafkaMessage(message, 'Erro ao cancelar solicitacão de rastreio de produto.');
       }
-      await this.produceKafkaMessage(message, "Solicitação de rastreio de produto cancelada.");
+      await this.produceKafkaMessage(message, 'Solicitação de rastreio de produto cancelada.');
       return;
     }
 
@@ -51,22 +51,22 @@ class MessageHandler {
 
     const userRequest: boolean = await this.messageRepository.saveUserRequest(message);
     if (!userRequest) {
-      await this.produceKafkaMessage(message, "Erro ao realizar solicitação.");
+      await this.produceKafkaMessage(message, 'Erro ao realizar solicitação.');
     }
-    await this.produceKafkaMessage(message, "Solicitação realizada com sucesso.");
+    await this.produceKafkaMessage(message, 'Solicitação realizada com sucesso.');
   }
 
   private async produceKafkaMessage(message: MyMessage, response: string): Promise<void> {
     try {
       const isGroup = message.id.remote.split('@')[1] == 'g.us';
-      const kafkaMessageShoot: Object = {
-        "data": {
-          "from": message.id.remote,
-          "notifyName": message._data.notifyName,
-          "body": message.body,
-          "isGroup": isGroup
+      const kafkaMessageShoot: object = {
+        'data': {
+          'from': message.id.remote,
+          'notifyName': message._data.notifyName,
+          'body': message.body,
+          'isGroup': isGroup
         }
-      }
+      };
       await this.kafkaProducer.produce('WHATSAPP-RESPONSES', JSON.stringify({ kafkaMessageShoot, response }));
     } catch (error) {
       console.error('Error producing Kafka message:', error);

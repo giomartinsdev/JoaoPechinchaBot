@@ -7,11 +7,11 @@ class WhatsappClient {
   constructor() {
     this.client = new Client({
       authStrategy: new LocalAuth(),
-      puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox',] },
+      puppeteer: { args: ['--no-sandbox', '--disable-setuid-sandbox'] }
     });
 
     this.client.on('ready', () => {
-      console.log('WhatsappWeb client is running!');
+      console.log('WhatsappWeb of responser client is running!');
     });
 
     this.client.on('qr', (qr) => {
@@ -23,4 +23,4 @@ class WhatsappClient {
 }
 
 
-export default WhatsappClient
+export default WhatsappClient;

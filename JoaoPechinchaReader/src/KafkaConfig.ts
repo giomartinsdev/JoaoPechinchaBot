@@ -24,10 +24,10 @@ class KafkaConfig {
     }
   }
 
-  async produce(topic: string, message: string) {
+  async produce(kafkaTopic: string, message: string) {
     try {
       await this.producer.send({
-        topic: topic,
+        topic: kafkaTopic,
         messages: [{ value: message }]
       });
     } catch (error) {
@@ -35,16 +35,17 @@ class KafkaConfig {
     }
   }
 
-  async consume(topic: string, callback: any) {
+  async consume(kafkaTopic: string, callback: any) {
     try {
       await this.consumer.connect();
       await this.consumer.subscribe({
-        topic: topic,
+        topic: kafkaTopic,
         fromBeginning: true
       });
       await this.consumer.run({
         eachMessage: async ({ topic, partition, message }: { topic: string, partition: number, message: any }) => {
           const value = message.value.toString();
+          console.log(topic, partition, value);
           callback(value);
         }
       });

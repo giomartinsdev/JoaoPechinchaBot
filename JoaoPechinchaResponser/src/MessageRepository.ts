@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import DatabaseConnection from "./DatabaseConnection";
+import DatabaseConnection from './DatabaseConnection';
 import { ParsedData } from './MessageConsumer';
 
 class MessageRepository {
@@ -42,7 +42,7 @@ class MessageRepository {
       AND product_value >= $${words.length + 1}
       AND (${words.map((_, index) => `addtional_info ILIKE '%' || $${index + 1} || '%'`).join(' OR ')})
   `;
-    
+
     const params = [...words, productValue];
 
     const result = await this.databaseConnection.runQuery(query, params);
@@ -68,4 +68,4 @@ class MessageRepository {
   }
 }
 
-export default MessageRepository
+export default MessageRepository;
