@@ -2,6 +2,7 @@ import MessageRepository from './MessageRepository';
 import DatabaseConnection from './DatabaseConnection';
 import MyMessage from './MessageInterface';
 import KafkaConfig from './KafkaConfig';
+import { PRODUCT_PATTERN, CANCEL_PATTERN } from './constants';
 
 class MessageHandler {
   private messageRepository: MessageRepository;
@@ -15,13 +16,11 @@ class MessageHandler {
   }
 
   private isProductMessage(message: string): boolean {
-    const productPattern = /Produto:\s*\w+/;
-    return productPattern.test(message);
+    return PRODUCT_PATTERN.test(message);
   }
 
   private cancelRequest(message: string): boolean {
-    const cancelPattern = /Cancelar/;
-    return cancelPattern.test(message);
+    return CANCEL_PATTERN.test(message);
   }
 
   private async isMember(message: MyMessage): Promise<boolean> {

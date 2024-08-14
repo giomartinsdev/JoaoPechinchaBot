@@ -1,6 +1,8 @@
+import { ParsedData } from './MessageConsumer';
 import { v4 as uuidv4 } from 'uuid';
 import DatabaseConnection from './DatabaseConnection';
-import { ParsedData } from './MessageConsumer';
+import { INSERT_PRODUCT_QUERY, SELECT_MEMBER_CONTACT_QUERY } from './queries';
+import { EMOJIS, FORBIDDEN_WORDS } from './constants';
 
 class MessageRepository {
   private databaseConnection: DatabaseConnection;
@@ -10,29 +12,74 @@ class MessageRepository {
   }
 
   async saveProductOnDB(parsedProduct: ParsedData) {
-    const query = 'INSERT INTO products VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+    parsedProduct.products = parsedProduct.products.map(product => product.trim());
+
+    const emojiRegex = new RegExp(EMOJIS.join('|'), 'g');
+    parsedProduct.products = parsedProduct.products.map(product => product.replace(emojiRegex, '').trim());
+
+    const specialCharRegex = /[_*]/g;
+    parsedProduct.products = parsedProduct.products.map(product => product.replace(specialCharRegex, '').trim());
+
+    let forbiddenWordsInProduct = 0;
+    parsedProduct.products.forEach(element => {
+      if (!(FORBIDDEN_WORDS.some(word => element.toLowerCase().startsWith(word) || element.toLowerCase().includes(word)))) {
+        forbiddenWordsInProduct += 1;
+      }
+    });
+
+    let productName = '';
+    let url = '';
+
+    for (let i = parsedProduct.products.length - 1; i >= 0; i--) {
+      const product = parsedProduct.products[i];
+      if (!FORBIDDEN_WORDS.some(word => product.toLowerCase().startsWith(word) || product.toLowerCase().includes(word))) {
+        productName = product.trim();
+        break;
+      }
+    }
+
+    console.log(productName);
+    console.log(parsedProduct.products);
+
+    url = parsedProduct.urls[0].trim();
+
+    if (!productName) {
+      return null;
+    }
+
+    const coupons = parsedProduct.coupons.length > 0 ? parsedProduct.coupons.join(', ') : null;
+
+    const price = parsedProduct.prices.length > 0 ? parsedProduct.prices[parsedProduct.prices.length - 1].replace(/[^0-9,]/g, '').trim() : null;
 
     const uuid = uuidv4();
     const createdAt = new Date().toISOString();
     const updatedAt = new Date().toISOString();
 
-    const product = parsedProduct.products[parsedProduct.products.length - 1] || null;
-    const coupons = parsedProduct.coupons[parsedProduct.coupons.length - 1] || null;
-    const url = parsedProduct.urls[parsedProduct.urls.length - 1] || null;
-    const price = parsedProduct.prices[parsedProduct.prices.length - 1].trim() || null;
-
-    const params = [uuid, createdAt, updatedAt, product, '0', parsedProduct.message, url, coupons, price];
-    const result = await this.databaseConnection.runQuery(query, params);
+    const params = [uuid, createdAt, updatedAt, productName, '0', parsedProduct.message, url, coupons, `R$${price}`];
+    const result = await this.databaseConnection.runQuery(INSERT_PRODUCT_QUERY, params);
     return result;
   }
 
   async discoverRequestsforTheProduct(parsedProduct: ParsedData) {
-    const lastProduct = parsedProduct.products[parsedProduct.products.length - 1];
-    if (!lastProduct) {
+    parsedProduct.products = parsedProduct.products.map(product => product.trim());
+    const emojiRegex = new RegExp(EMOJIS.join('|'), 'g');
+    parsedProduct.products = parsedProduct.products.map(product => product.replace(emojiRegex, '').trim());
+    const specialCharRegex = /[_*]/g;
+    parsedProduct.products = parsedProduct.products.map(product => product.replace(specialCharRegex, '').trim());
+
+    const validProducts = parsedProduct.products.filter(product =>
+      !product.toLowerCase().startsWith('grupo') &&
+      !product.toLowerCase().startsWith('produtos') &&
+      !product.toLowerCase().includes('promoção')
+    );
+
+    if (validProducts.length === 0) {
       return null;
     }
 
-    const words = lastProduct.split(' ').filter(word => word.trim() !== '');
+    const productToUse = validProducts[0];
+
+    const words = productToUse.split(' ').filter(word => word.trim() !== '');
     const productValue = parseFloat(parsedProduct.prices[0].replace('R$', '').replace(',', '.').trim());
 
     let query = `
@@ -55,10 +102,9 @@ class MessageRepository {
   }
 
   async getMemberContact(memberId: string) {
-    const query = 'SELECT user_contact FROM members WHERE id = $1';
     const params = [memberId];
 
-    const result = await this.databaseConnection.runQuery(query, params);
+    const result = await this.databaseConnection.runQuery(SELECT_MEMBER_CONTACT_QUERY, params);
 
     if (result.rows.length > 0) {
       return result.rows[0].user_contact;

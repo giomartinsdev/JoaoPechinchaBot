@@ -1,6 +1,7 @@
 import KafkaConfig from './KafkaConfig';
 import WhatsappClient from './WhatsappClient';
 import MessageRepository from './MessageRepository';
+import { PRICE_PATTERN, URL_PATTERN, COUPON_PATTERN, PRODUCT_PATTERN } from './constants';
 
 export interface ParsedData {
   products: string[];
@@ -108,16 +109,11 @@ class MessageConsumer {
   }
 
   private parseMessage(message: string): ParsedData {
-    const pricePattern = /R\$\s*\d+[\.,]?\d*/g;
-    const urlPattern = /https?:\/\/\S+/g;
-    const couponPattern = /cupom:\s*[*]?([\w\d]+)[*]?/gi;
-    const productPattern = /^(?!.*(R\$|\bpor\b|\bcupom\b|https?:\/\/)).+$/gmi;
-
     return {
-      products: (message.match(productPattern) || []).map(p => p.trim()).filter(Boolean),
-      prices: message.match(pricePattern) || [],
-      urls: message.match(urlPattern) || [],
-      coupons: Array.from(message.matchAll(couponPattern), m => m[1]),
+      products: (message.match(PRODUCT_PATTERN) || []).map(p => p.trim()).filter(Boolean),
+      prices: message.match(PRICE_PATTERN) || [],
+      urls: message.match(URL_PATTERN) || [],
+      coupons: Array.from(message.matchAll(COUPON_PATTERN), m => m[1]),
       message
     };
   }
