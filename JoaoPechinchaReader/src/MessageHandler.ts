@@ -1,17 +1,17 @@
 import MessageRepository from './MessageRepository';
-import DatabaseConnection from './DatabaseConnection';
 import MyMessage from './MessageInterface';
 import KafkaConfig from './KafkaConfig';
 import { PRODUCT_PATTERN, CANCEL_PATTERN } from './constants';
+import dotenv from 'dotenv';
 
+dotenv.config();
 class MessageHandler {
   private messageRepository: MessageRepository;
-  private databaseConnection: DatabaseConnection;
   private kafkaProducer: KafkaConfig;
-
-  constructor(messageRepository: MessageRepository, databaseConnection: DatabaseConnection, kafkaProducer: KafkaConfig) {
+  private readonly kafkaTopic: string = process.env.KAFKA_TOPIC || 'WHATSAPP-RESPONSES';
+  
+  constructor(messageRepository: MessageRepository, kafkaProducer: KafkaConfig) {
     this.messageRepository = messageRepository;
-    this.databaseConnection = databaseConnection;
     this.kafkaProducer = kafkaProducer;
   }
 
@@ -66,7 +66,7 @@ class MessageHandler {
           'isGroup': isGroup
         }
       };
-      await this.kafkaProducer.produce('WHATSAPP-RESPONSES', JSON.stringify({ kafkaMessageShoot, response }));
+      await this.kafkaProducer.produce(this.kafkaTopic, JSON.stringify({ kafkaMessageShoot, response }));
     } catch (error) {
       console.error('Error producing Kafka message:', error);
     }

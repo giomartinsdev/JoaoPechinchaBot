@@ -13,7 +13,7 @@ async function main() {
 
   await kafkaConfig.connectProducer();
 
-  const messageHandler = new MessageHandler(messageRepository, databaseConnection, kafkaConfig);
+  const messageHandler = new MessageHandler(messageRepository, kafkaConfig);
 
   whatsappClient.client.on('message', async (message: MyMessage) => {
     await messageHandler.processMessage(message);

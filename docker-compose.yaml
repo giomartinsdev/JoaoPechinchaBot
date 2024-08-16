@@ -12,7 +12,6 @@ services:
     networks:
       - app-network
 
-
   joao_pechincha_responser:
     build: ./JoaoPechinchaResponser
     container_name: joao_pechincha_responser_c
@@ -23,6 +22,23 @@ services:
     depends_on:
       - redpanda
       - postgres
+    networks:
+      - app-network
+
+  phb_poller:
+    build: ./PhbPoller
+    container_name: phb_poller_c
+    ports:
+      - '3003:3003'
+    environment:
+      KAFKA_BROKER: redpanda:29092
+    depends_on:
+      - redpanda
+      - postgres
+      - joao_pechincha_reader
+      - joao_pechincha_responser
+    env_file:
+      - .env
     networks:
       - app-network
 

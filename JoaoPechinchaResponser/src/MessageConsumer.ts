@@ -2,6 +2,9 @@ import KafkaConfig from './KafkaConfig';
 import WhatsappClient from './WhatsappClient';
 import MessageRepository from './MessageRepository';
 import { PRICE_PATTERN, URL_PATTERN, COUPON_PATTERN, PRODUCT_PATTERN } from './constants';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export interface ParsedData {
   products: string[];
@@ -15,6 +18,8 @@ class MessageConsumer {
   private kafkaConfig: KafkaConfig;
   private whatsappClient: WhatsappClient;
   private messageRepository: MessageRepository;
+  private readonly kafkaTopic: string = process.env.KAFKA_TOPIC || 'WHATSAPP-RESPONSES';
+
 
   constructor(
     kafkaConfig: KafkaConfig,
@@ -28,7 +33,7 @@ class MessageConsumer {
 
   async startConsume(): Promise<void> {
     try {
-      await this.kafkaConfig.subscribe('WHATSAPP-RESPONSES');
+      await this.kafkaConfig.subscribe(this.kafkaTopic);
       this.consumeMessages();
     } catch (error) {
       console.error('Erro ao se inscrever no tópico:', error);
