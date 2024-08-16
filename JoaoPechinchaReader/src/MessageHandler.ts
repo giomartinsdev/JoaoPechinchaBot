@@ -9,7 +9,7 @@ class MessageHandler {
   private messageRepository: MessageRepository;
   private kafkaProducer: KafkaConfig;
   private readonly kafkaTopic: string = process.env.KAFKA_TOPIC || 'WHATSAPP-RESPONSES';
-  
+
   constructor(messageRepository: MessageRepository, kafkaProducer: KafkaConfig) {
     this.messageRepository = messageRepository;
     this.kafkaProducer = kafkaProducer;

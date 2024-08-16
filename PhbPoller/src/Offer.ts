@@ -23,4 +23,4 @@ interface Offer {
   dateTime: number;
 }
 
-export default Offer
+export default Offer;

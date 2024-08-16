@@ -7,5 +7,4 @@ async function main() {
   await offersPoller.startPolling();
 }
 
-
 main();

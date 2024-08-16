@@ -1,15 +1,18 @@
 import { Pool, PoolClient, QueryResult } from 'pg';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 class DatabaseConnection {
   private pool: Pool;
 
   constructor() {
     this.pool = new Pool({
-      user: 'postgres',
-      password: 'senha_segura',
-      host: 'postgres',
+      user: process.env.DB_USER || 'postgres',
+      password: process.env.PASSWORD || 'senha_segura',
+      host: process.env.HOST || 'postgres',
       port: 5432,
-      database: 'postgres'
+      database: process.env.DATABASE || 'postgres'
     });
     console.log('Connected to database');
   }

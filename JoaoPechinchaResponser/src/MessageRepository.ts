@@ -38,9 +38,6 @@ class MessageRepository {
       }
     }
 
-    console.log(productName);
-    console.log(parsedProduct.products);
-
     url = parsedProduct.urls[0].trim();
 
     if (!productName) {

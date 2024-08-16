@@ -1,6 +1,10 @@
 import { Kafka, logLevel } from 'kafkajs';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const KAFKA_BROKER = process.env.KAFKA_BROKER || 'localhost:9092';
+const GROUP_ID = process.env.TEST_GROUP || 'TEST-GROUP';
 
 class KafkaConfig {
   kafka: Kafka;
@@ -13,14 +17,14 @@ class KafkaConfig {
       logLevel: logLevel.ERROR
     });
     this.producer = this.kafka.producer();
-    this.consumer = this.kafka.consumer({ groupId: 'TEST-GROUP' });
+    this.consumer = this.kafka.consumer({ groupId: GROUP_ID });
   }
 
   async connectProducer() {
     try {
       await this.producer.connect();
     } catch (error) {
-      console.error('Erro ao conectar produtor Kafka:', error);
+      console.error('Err subscribing to the topic', error);
     }
   }
 
@@ -50,7 +54,7 @@ class KafkaConfig {
         }
       });
     } catch (error) {
-      console.error('Erro ao consumir mensagem:', error);
+      console.error('Err consuming the topic:', error);
     }
   }
 }

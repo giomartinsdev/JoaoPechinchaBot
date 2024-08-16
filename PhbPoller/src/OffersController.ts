@@ -22,8 +22,8 @@ class OffersPoller {
       const apiResponse = await axios.get<ApiResponse>(this.pollerUrl, {
         params: {
           sortBy: 'createdAt',
-          perPage: 1,
-        },
+          perPage: 1
+        }
       });
 
       const offers = apiResponse.data.offers;
@@ -46,27 +46,27 @@ class OffersPoller {
                 'notifyName': 'phb',
                 'body': mountedBody,
                 'isGroup': true,
-                'phbOffer': latestOffer,
-              },
+                'phbOffer': latestOffer
+              }
           };
-          console.log('Nova oferta encontrada. Enviando mensagem...' + JSON.stringify({ kafkaMessageShoot, response }));
+          console.log('New offer founded in Poll sending to queue...');
 
           await this.kafkaConfig.produce(this.kafkaTopic, JSON.stringify({ kafkaMessageShoot, response }));
           this.lastOfferId = latestOffer.id;
         } else {
-          console.log('A oferta atual é igual à última oferta. Nenhuma mensagem enviada.');
+          console.log('The actual offer is the same as the last, message not sended.');
         }
       } else {
-        console.log('Nenhuma nova oferta encontrada.');
+        console.log('No one offer founded.');
       }
     } catch (error) {
-      console.error('Erro ao verificar atualizações:', error);
+      console.error('err trying to verify updates:', error);
     }
   }
 
   async startPolling(): Promise<void> {
     await this.kafkaConfig.connectProducer();
-    console.log('Starting poller of offerts...');
+    console.log('Starting poller...');
     setInterval(() => this.fetchLatestOffers(), this.pollerInterval);
     this.fetchLatestOffers();
   }

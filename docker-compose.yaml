@@ -9,6 +9,8 @@ services:
     depends_on:
       - redpanda
       - postgres
+    env_file:
+      - .env
     networks:
       - app-network
 
@@ -20,8 +22,11 @@ services:
     environment:
       KAFKA_BROKER: redpanda:29092
     depends_on:
+      - joao_pechincha_reader
       - redpanda
       - postgres
+    env_file:
+      - .env
     networks:
       - app-network
 

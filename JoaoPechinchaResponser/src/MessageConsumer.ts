@@ -36,7 +36,7 @@ class MessageConsumer {
       await this.kafkaConfig.subscribe(this.kafkaTopic);
       this.consumeMessages();
     } catch (error) {
-      console.error('Erro ao se inscrever no tópico:', error);
+      console.error('Err subscripting to the topic:', error);
     }
   }
 
@@ -61,27 +61,27 @@ class MessageConsumer {
           if (memberIds) {
             await this.notifyMembersAboutProduct(parsedProduct, memberIds);
           } else {
-            console.log(`Não existem membros para este produto: ${this.getLastProduct(parsedProduct)}`);
+            console.log(`No one member founded to the especified product: ${this.getLastProduct(parsedProduct)}`);
           }
         });
 
         await this.sleep(1000);
       }
     } catch (error) {
-      console.error('Erro ao consumir mensagem:', error);
+      console.error('Err consuming message:', error);
     }
   }
 
   private async responser(from: string, response: string): Promise<void> {
     if (this.isGroup(from) || !this.isValidWid(from)) {
-      console.error('wid inválido ou grupo detectado:', from);
+      console.error('Invalid wid or group indentified:', from);
       return;
     }
 
     try {
       await this.whatsappClient.client.sendMessage(from, response);
     } catch (error) {
-      console.error('Erro ao enviar mensagem:', error);
+      console.error('Err sending message:', error);
     }
   }
 
@@ -89,7 +89,7 @@ class MessageConsumer {
     const memberIds = await this.messageRepository.discoverRequestsforTheProduct(parsedProduct);
 
     if (!memberIds) {
-      console.log(`Produto não encontrado: ${this.getLastProduct(parsedProduct)}`);
+      console.log(`No one member founded to the especified product: ${this.getLastProduct(parsedProduct)}`);
     }
 
     return memberIds;
@@ -100,7 +100,11 @@ class MessageConsumer {
       const memberContact = await this.messageRepository.getMemberContact(member);
       await this.responser(
         memberContact,
-        `Produto encontrado: ${this.getLastProduct(product)}\n${product.message}`
+        `
+        OIII, vim te trazer o produto que você tanto buscava!: ${this.getLastProduct(product)}
+        \n${product.message}\n
+        Obrigado por usar o João Pechincha! 🚀
+        `
       );
     }
   }
