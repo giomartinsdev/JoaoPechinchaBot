@@ -43,8 +43,9 @@ class MessageHandler {
     }
 
     if (!this.isProductMessage(message.body)) {
-      const productString: string = 'Produto: \n Informacoes adicionais: \n Valor máximo: \n';
-      await this.produceKafkaMessage(message, `Por favor, informe o texto necessário para cadastrar um produto. ${productString}`);
+      const productString: string = 'Produto: iphone\nInformacoes adicionais: 13\nValor máximo: 3000';
+      await this.produceKafkaMessage(message,
+        `Por favor, utilize do texto necessário para colocar um produto na sua lista de desejos, quando encontrarmos uma promoção com as informações abaixo notificarei você! (Exemplo)\n\n${productString}`);
       return;
     }
 

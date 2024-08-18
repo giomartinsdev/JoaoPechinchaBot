@@ -61,12 +61,12 @@ CREATE TABLE public.products (
 	id uuid DEFAULT gen_random_uuid() NOT NULL,
 	created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
 	updated_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
-	product_name varchar(255) NULL,
-	product_classification varchar(255) NULL,
+	product_name varchar(1000) NULL,
+	product_classification varchar(1000) NULL,
 	product_message varchar(1000) NULL,
-	product_url varchar(255) NULL,
-	coupouns varchar(255) NULL,
-	price varchar(255) NULL,
+	product_url varchar(1000) NULL,
+	coupouns varchar(1000) NULL,
+	price varchar(1000) NULL,
 	CONSTRAINT products_pkey PRIMARY KEY (id)
 );
 

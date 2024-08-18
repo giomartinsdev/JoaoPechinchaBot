@@ -85,6 +85,7 @@ class MessageRepository {
     WHERE (${words.map((_, index) => `product_name ILIKE '%' || $${index + 1} || '%'`).join(' OR ')})
       AND product_value >= $${words.length + 1}
       AND (${words.map((_, index) => `addtional_info ILIKE '%' || $${index + 1} || '%'`).join(' OR ')})
+      AND request_status = 'active'
   `;
 
     const params = [...words, productValue];

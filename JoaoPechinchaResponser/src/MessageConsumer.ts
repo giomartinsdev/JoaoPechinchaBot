@@ -119,8 +119,13 @@ class MessageConsumer {
 
   private parseMessage(message: string): ParsedData {
     return {
-      products: (message.match(PRODUCT_PATTERN) || []).map(p => p.trim()).filter(Boolean),
-      prices: message.match(PRICE_PATTERN) || [],
+      products: (message.match(PRODUCT_PATTERN) || [])
+        .map(p => p.trim()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase())
+        .filter(Boolean),
+      prices: message.match(PRICE_PATTERN) || ['R$0'],
       urls: message.match(URL_PATTERN) || [],
       coupons: Array.from(message.matchAll(COUPON_PATTERN), m => m[1]),
       message

@@ -47,6 +47,24 @@ services:
     networks:
       - app-network
 
+  p_poller: # second poller, optional
+    build: ./PPoller
+    container_name: p_poller_c
+    ports:
+      - '3004:3004'
+    environment:
+      KAFKA_BROKER: redpanda:29092
+    depends_on:
+      - redpanda
+      - postgres
+      - joao_pechincha_reader
+      - joao_pechincha_responser
+      - phb_poller
+    env_file:
+      - .env
+    networks:
+      - app-network
+
   postgres:
     image: postgres:latest
     ports:
