@@ -69,3 +69,7 @@ bower_components
 # TSD Debug info
 tsd-debug.log
 .env
+
+init-mongo.js
+.wwebjs_auth
+.wwebjs_cache

@@ -2,8 +2,7 @@
 
 Este é um projeto de bot de WhatsApp para aviso de promoções desenvolvido em [Node.js](https://nodejs.org/) utilizando a biblioteca [WhatsappWebJS](https://docs.wwebjs.dev) para interagir com a API do WhatsApp e a tecnologia [Kafka](https://kafka.apache.org/) para mensageria.
 
-Este é um bot de Whatsapp para aviso e rastreio de promoções de produtos através de grupos no Whatsapp ou poll. Desenvolvido em [Node.js](https://nodejs.org/) com a biblioteca [WhatsappWebJS](https://docs.wwebjs.dev) utilizando mensageria [Kafka](https://kafka.apache.org/), containers [Docker](https://docs.docker.com/compose/) e banco [PostgreSQL](https://www.postgresql.org/download/
-).
+Este é um bot de Whatsapp para aviso e rastreio de promoções de produtos através de grupos no Whatsapp ou poll. Desenvolvido em [Node.js](https://nodejs.org/) com a biblioteca [WhatsappWebJS](https://docs.wwebjs.dev) utilizando mensageria [Kafka](https://kafka.apache.org/), containers [Docker](https://docs.docker.com/compose/) e bancos [PostgreSQL](https://www.postgresql.org/download/) e mongodb. 
 ## Pré-requisitos
 
 Docker e uma conexão estável
