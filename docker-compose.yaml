@@ -8,7 +8,6 @@ services:
       KAFKA_BROKER: redpanda:29092
     depends_on:
       - redpanda
-      - postgres
       - mongodb
     env_file:
       - .env
@@ -26,15 +25,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: senha_segura
-    networks:
-      - app-network
-
-  postgres:
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_PASSWORD: senha_segura
     networks:
       - app-network
 

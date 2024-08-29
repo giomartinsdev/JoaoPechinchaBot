@@ -1,3 +1,3 @@
-import { MongoDBHandler, PostgreHandler } from "./utils/DatabaseHandler"
+import { MongoDBHandler } from "./utils/DatabaseHandler"
 
 console.log("hello Index");
