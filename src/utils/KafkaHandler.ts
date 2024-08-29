@@ -1,4 +1,5 @@
-import { Consumer, Kafka, logLevel, Producer } from "kafkajs";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Consumer, Kafka, logLevel, Message, Producer } from "kafkajs";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -50,7 +51,7 @@ class KafkaHandler {
     }
   }
 
-  async consume(callback: any) {
+  async consume(callback: (value: string) => void) {
     try {
       await this.consumer.run({
         eachMessage: async ({
@@ -60,9 +61,9 @@ class KafkaHandler {
         }: {
           topic: string;
           partition: number;
-          message: any;
+          message: Message;
         }) => {
-          const value = message.value.toString();
+          const value = message.value?.toString() ?? "";
           callback(value);
         },
       });

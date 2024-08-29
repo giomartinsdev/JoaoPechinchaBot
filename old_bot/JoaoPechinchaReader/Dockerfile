@@ -1,7 +1,7 @@
 FROM node:slim
 
 WORKDIR /usr/src/app
-COPY ./package*.json ./
+COPY package*.json ./
 RUN npm install
 COPY . .
 EXPOSE 3001
@@ -17,3 +17,4 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 CMD ["npm", "run", "start:dev"]
+
