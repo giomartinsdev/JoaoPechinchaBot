@@ -1,5 +1,5 @@
-import { Consumer, Kafka, logLevel, Producer } from 'kafkajs';
-import dotenv from 'dotenv';
+import { Consumer, Kafka, logLevel, Producer } from "kafkajs";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -10,18 +10,20 @@ class KafkaHandler {
 
   constructor() {
     this.kafka = new Kafka({
-      brokers: [process.env.KAFKA_BROKER || 'localhost:9092'],
-      logLevel: logLevel.ERROR
+      brokers: [process.env.KAFKA_BROKER || "localhost:9092"],
+      logLevel: logLevel.ERROR,
     });
     this.producer = this.kafka.producer();
-    this.consumer = this.kafka.consumer({ groupId: process.env.TEST_GROUP || 'TEST-GROUP' });
+    this.consumer = this.kafka.consumer({
+      groupId: process.env.TEST_GROUP || "TEST-GROUP",
+    });
   }
 
   async connectProducer() {
     try {
       await this.producer.connect();
     } catch (error) {
-      console.error('Err connecting to kafkaConnector:', error);
+      console.error("Err connecting to kafkaConnector:", error);
     }
   }
 
@@ -29,7 +31,7 @@ class KafkaHandler {
     try {
       await this.producer.send({
         topic: KafkaTopic,
-        messages: [{ value: message }]
+        messages: [{ value: message }],
       });
     } catch (error) {
       console.log(error);
@@ -41,23 +43,31 @@ class KafkaHandler {
       await this.consumer.connect();
       await this.consumer.subscribe({
         topic: KafkaTopic,
-        fromBeginning: true
+        fromBeginning: true,
       });
     } catch (error) {
-      console.error('Err subscribing to the topic', error);
+      console.error("Err subscribing to the topic", error);
     }
   }
 
   async consume(callback: any) {
     try {
       await this.consumer.run({
-        eachMessage: async ({ topic, partition, message }: { topic: string, partition: number, message: any }) => {
+        eachMessage: async ({
+          topic,
+          partition,
+          message,
+        }: {
+          topic: string;
+          partition: number;
+          message: any;
+        }) => {
           const value = message.value.toString();
           callback(value);
-        }
+        },
       });
     } catch (error) {
-      console.error('Err consuming the topic:', error);
+      console.error("Err consuming the topic:", error);
     }
   }
 }

@@ -1,6 +1,6 @@
-import { MongoClient, Db } from 'mongodb';
-import { Client } from 'pg';
-import dotenv from 'dotenv';
+import { MongoClient, Db } from "mongodb";
+import { Client } from "pg";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -27,7 +27,7 @@ export class MongoDBHandler {
         await this.client.close();
         console.log("mongodb disconnected!");
       } catch (error) {
-        console.error("err disconnecting mongodb:", error)
+        console.error("err disconnecting mongodb:", error);
       }
     } else {
       console.log("no one active connection with mongodb to disconnect.");
@@ -56,7 +56,11 @@ export class MongoDBHandler {
     }
   }
 
-  static async updateDocument(collectionName: string, query: object, newValues: object) {
+  static async updateDocument(
+    collectionName: string,
+    query: object,
+    newValues: object,
+  ) {
     try {
       const collection = this.db.collection(collectionName);
       const result = await collection.updateOne(query, { $set: newValues });
