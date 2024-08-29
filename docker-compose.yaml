@@ -1,3 +1,12 @@
+
+volumes:
+  mongo_data:
+  redpanda_data:
+
+networks:
+  app-network:
+    driver: bridge
+
 services:
   jp_main:
     build: .
@@ -5,12 +14,79 @@ services:
     ports:
       - '3001:3001'
     environment:
-      KAFKA_BROKER: redpanda:29092
+      env_file: .env
     depends_on:
-      - redpanda
       - mongodb
     env_file:
       - .env
+    networks:
+      - app-network
+
+  redpanda:
+    image: redpandadata/redpanda:latest
+    container_name: redpanda
+    command:
+      - redpanda
+      - start
+      - --overprovisioned
+      - --smp 1
+      - --memory 1G
+      - --reserve-memory 0M
+      - --node-id 0
+      - --check=false
+      - --advertise-kafka-addr=redpanda:9092 
+    ports:
+      - "9092:9092"
+      - "9644:9644" # Admin API
+    volumes:
+      - redpanda_data:/var/lib/redpanda/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rpk", "cluster", "info"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  create-topic:
+    image: redpandadata/redpanda:latest
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      sleep 10;
+      until rpk cluster info --brokers=redpanda:9092; do
+        echo 'Esperando o Redpanda ficar pronto...';
+        sleep 5;
+      done;
+      rpk topic create WHATSAPP-RESPONSES -p 1 -r 1 --brokers=redpanda:9092"
+    networks:
+      - app-network
+
+  redpanda-console:
+    image: redpandadata/console:latest
+    container_name: redpanda-console
+    entrypoint: /bin/sh
+    command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml; /app/console'
+    ports:
+      - "8080:8080" 
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda:9092"]
+          schemaRegistry:
+            enabled: true
+            urls: ["http://redpanda:8081"]
+        redpanda:
+          adminApi:
+            enabled: true
+            urls: ["http://redpanda:9644"]
     networks:
       - app-network
 
@@ -25,48 +101,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: senha_segura
-    networks:
-      - app-network
-
-  redpanda:
-    image: docker.redpanda.com/vectorized/redpanda:v22.2.2
-    container_name: joao_pechincha_broker
-    command:
-      - redpanda start
-      - --kafka-addr PLAINTEXT://0.0.0.0:29092
-      - --advertise-kafka-addr PLAINTEXT://redpanda:29092
-    ports:
-      - 29092:29092
-    networks:
-      - app-network
-
-  console:
-    container_name: joao_pechincha_console
-    image: docker.redpanda.com/vectorized/console:master-173596f
-    environment:
-      KAFKA_BROKERS: redpanda:29092
-    ports:
-      - 8080:8080
     depends_on:
-      - redpanda
+      redpanda:
+        condition: service_healthy
     networks:
       - app-network
-
-  kafdrop:
-    image: obsidiandynamics/kafdrop
-    restart: "no"
-    ports:
-      - "9000:9000"
-    environment:
-      KAFKA_BROKERCONNECT: "redpanda:29092"
-    depends_on:
-      - "redpanda"
-    networks:
-      - app-network
-
-volumes:
-  mongo_data:
-
-networks:
-  app-network:
-    driver: bridge
+  
