@@ -24,7 +24,7 @@ class WhatsappHandler {
   }
 
   verifyIfIsDirectMessage(message: Message): boolean {
-    return message.id.remote.split("@")[1] === "c.us";
+    return message.from.split("@")[1] == "c.us";
   }
 }
 
