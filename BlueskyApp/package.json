@@ -1,0 +1,22 @@
+{
+  "name": "bluesky_test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build:dev": "tsc",
+    "start:dev": "node build/index.js",
+    "dev": "tsc && node ./build/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@atproto/api": "^0.13.5",
+    "@types/axios": "^0.9.36",
+    "@types/dotenv": "^6.1.1",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "kafkajs": "^2.2.4",
+    "typescript": "^5.5.4"
+  }
+}
