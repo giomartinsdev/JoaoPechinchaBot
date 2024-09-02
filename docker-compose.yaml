@@ -1,34 +1,34 @@
 services:
-  joao_pechincha_reader:
-    build: ./JoaoPechinchaReader
-    container_name: joao_pechincha_reader_c
-    ports:
-      - '3001:3001'
-    environment:
-      KAFKA_BROKER: redpanda:29092
-    depends_on:
-      - redpanda
-      - postgres
-    env_file:
-      - .env
-    networks:
-      - app-network
+  # joao_pechincha_reader:
+  #   build: ./JoaoPechinchaReader
+  #   container_name: joao_pechincha_reader_c
+  #   ports:
+  #     - '3001:3001'
+  #   environment:
+  #     KAFKA_BROKER: redpanda:29092
+  #   depends_on:
+  #     - redpanda
+  #     - postgres
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - app-network
 
-  joao_pechincha_responser:
-    build: ./JoaoPechinchaResponser
-    container_name: joao_pechincha_responser_c
-    ports:
-      - '3002:3002'
-    environment:
-      KAFKA_BROKER: redpanda:29092
-    depends_on:
-      - joao_pechincha_reader
-      - redpanda
-      - postgres
-    env_file:
-      - .env
-    networks:
-      - app-network
+  # joao_pechincha_responser:
+  #   build: ./JoaoPechinchaResponser
+  #   container_name: joao_pechincha_responser_c
+  #   ports:
+  #     - '3002:3002'
+  #   environment:
+  #     KAFKA_BROKER: redpanda:29092
+  #   depends_on:
+  #     - joao_pechincha_reader
+  #     - redpanda
+  #     - postgres
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - app-network
 
   phb_poller:
     build: ./PhbPoller
@@ -40,12 +40,30 @@ services:
     depends_on:
       - redpanda
       - postgres
-      - joao_pechincha_reader
-      - joao_pechincha_responser
+      # - joao_pechincha_reader
+      # - joao_pechincha_responser
     env_file:
       - .env
     networks:
       - app-network
+
+  bluesky_app:
+    build: ./BlueskyApp
+    container_name: bluesky_app_c
+    ports:
+      - '3005:3005'
+    environment:
+      KAFKA_BROKER: redpanda:29092
+    depends_on:
+      - redpanda
+      - postgres
+      # - joao_pechincha_reader
+      # - joao_pechincha_responser
+    env_file:
+      - .env
+    networks:
+      - app-network
+
 
   p_poller: # second poller, optional
     build: ./PPoller
@@ -57,8 +75,8 @@ services:
     depends_on:
       - redpanda
       - postgres
-      - joao_pechincha_reader
-      - joao_pechincha_responser
+      # - joao_pechincha_reader
+      # - joao_pechincha_responser
       - phb_poller
     env_file:
       - .env
