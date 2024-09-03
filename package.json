@@ -12,6 +12,7 @@
     "@atproto/api": "^0.13.5",
     "ansi-styles": "^3.2.1",
     "argparse": "^1.0.10",
+    "axios": "^1.7.7",
     "balanced-match": "^1.0.2",
     "brace-expansion": "^1.1.11",
     "builtin-modules": "^1.1.1",
