@@ -41,7 +41,7 @@ class OffersPoller {
             const formattedPrice = new Intl.NumberFormat("pt-BR", {
               style: "currency",
               currency: "BRL",
-            }).format(latestOffer.price / 100); 
+            }).format(latestOffer.price / 100);
 
             const mountedBody: string = `
               ${latestOffer.title}\n
