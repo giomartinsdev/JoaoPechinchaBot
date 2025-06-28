@@ -1,36 +1,44 @@
+Here is your README content translated into English:
+
+---
+
 # JoaoPechincha
 
-Este é um projeto de bot de WhatsApp para aviso de promoções desenvolvido em [Node.js](https://nodejs.org/) utilizando a biblioteca [WhatsappWebJS](https://docs.wwebjs.dev) para interagir com a API do WhatsApp e a tecnologia [Kafka](https://kafka.apache.org/) para mensageria.
+This is a WhatsApp bot project for promotion alerts developed in [Node.js](https://nodejs.org/) using the [WhatsappWebJS](https://docs.wwebjs.dev) library to interact with the WhatsApp API and [Kafka](https://kafka.apache.org/) for messaging.
 
-Este é um bot de Whatsapp para aviso e rastreio de promoções de produtos através de grupos no Whatsapp ou poll. Desenvolvido em [Node.js](https://nodejs.org/) com a biblioteca [WhatsappWebJS](https://docs.wwebjs.dev) utilizando mensageria [Kafka](https://kafka.apache.org/), containers [Docker](https://docs.docker.com/compose/) e banco [PostgreSQL](https://www.postgresql.org/download/
-).
-## Pré-requisitos
+This bot notifies and tracks product promotions via WhatsApp groups or polls. Developed in [Node.js](https://nodejs.org/) with the [WhatsappWebJS](https://docs.wwebjs.dev) library, it uses [Kafka](https://kafka.apache.org/) for messaging, [Docker](https://docs.docker.com/compose/) for containers, and [PostgreSQL](https://www.postgresql.org/download/) as the database.
 
-Docker e uma conexão estável
+## Prerequisites
 
-## Uso
+Docker and a stable internet connection.
 
-1. Crie um .env na raiz do projeto que seja composto por 
-```
-POLL_URL='{{URL POLL}}' (caso tenha)
-KAFKA_TOPIC=WHATSAPP-RESPONSES
-POLL_INTERVAL=300000
-GROUP_ID=TEST-GROUP
+## Usage
 
-DB_USER={{DBUSER}}
-PASSWORD={{SENHADOBANCO}}
-HOST=postgres
-DATABASE={{DATABASE}}
-```
-1. Inicie o bot de WhatsApp: `docker compose up --build`.
-2. Escaneie o código QR exibido no terminal usando o WhatsApp em seu dispositivo móvel.
-2.1(tip). Caso algum dos servicos de qrcode nao funcione vocÊ pode dar restart apenas no container do respectivo container. 
-3. Entre em grupos para analise das mensagens ou configure um POLL
+1. Create a .env file at the root of the project with the following content:
+   ```
+   POLL_URL='{{POLL URL}}' (if applicable)
+   KAFKA_TOPIC=WHATSAPP-RESPONSES
+   POLL_INTERVAL=300000
+   GROUP_ID=TEST-GROUP
 
-## Contribuição
+   DB_USER={{DBUSER}}
+   PASSWORD={{DATABASE_PASSWORD}}
+   HOST=postgres
+   DATABASE={{DATABASE}}
+   ```
+2. Start the WhatsApp bot: `docker compose up --build`.
+3. Scan the QR code displayed in the terminal using WhatsApp on your mobile device.
+   3.1 (Tip) If any of the QR code services do not work, you can restart only the respective container.
+4. Join groups to analyze messages or configure a POLL.
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou enviar um pull request ou mandar um pix :p.
+## Contribution
 
-## Licença
+Contributions are welcome! Feel free to open an issue, submit a pull request, or even send a Pix :p.
 
-Este projeto está licenciado sob a [MIT License](https://opensource.org/licenses/MIT).
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+---
+
+Let me know if you’d like this saved directly into your README.md file or if you want any adjustments!
